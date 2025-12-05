@@ -11,6 +11,7 @@ target_include_directories(aoc_common_${YEAR} PUBLIC .)
 # Find all day directories
 file(GLOB day_dirs LIST_DIRECTORIES true "day_*")
 list(FILTER day_dirs INCLUDE REGEX "day_[0-9]+$")
+message(STATUS "Found day directories: ${day_dirs}")
 
 # Collect all day source files
 set(day_sources "")
