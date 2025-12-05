@@ -5,6 +5,7 @@
 #include "day_1/day_1.h"
 #include "day_2/day_2.h"
 #include "day_3/day_3.h"
+#include "day_4/day_4.h"
 #include <iostream>
 #include <string>
 #include <map>
@@ -58,6 +59,7 @@ int main(int argc, char* argv[]) {
         {1, run_day_1},
         {2, run_day_2},
         {3, run_day_3},
+        {4, run_day_4},
     };
     
     if (day_num < 1 || day_num > 25) {
