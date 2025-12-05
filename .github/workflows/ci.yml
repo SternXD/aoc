@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        build_type: [Debug, Release]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6.0.1
+
+    - name: Set up CMake
+      uses: jwlawson/actions-setup-cmake@v2.0.2
+
+    - name: Create build directory
+      run: cmake -E make_directory ${{ github.workspace }}/build
+
+    - name: Configure CMake
+      working-directory: ${{ github.workspace }}/build
+      run: cmake ${{ github.workspace }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+    - name: Build
+      working-directory: ${{ github.workspace }}/build
+      run: cmake --build . --config ${{ matrix.build_type }}
+
+    - name: Collect executables
+      working-directory: ${{ github.workspace }}/build
+      shell: bash
+      run: |
+        mkdir -p artifacts
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          # On Windows, find .exe files (excluding intermediate build files)
+          find . -name "aoc*.exe" -type f -not -path "*/CMakeFiles/*" -not -path "*/.*" -exec cp {} artifacts/ \;
+        else
+          # On Linux/Mac, find executable files
+          find . -type f -name "aoc*" -not -path "*/CMakeFiles/*" -not -path "*/.*" | while read file; do
+            if [[ -x "$file" ]]; then
+              cp "$file" artifacts/
+            fi
+          done
+        fi
+        ls -la artifacts/ || echo "No executables found"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v5.0.0
+      with:
+        name: aoc-binaries-${{ matrix.os }}-${{ matrix.build_type }}
+        path: ${{ github.workspace }}/build/artifacts/*
+        if-no-files-found: warn
+        retention-days: 7
+
