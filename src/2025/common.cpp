@@ -36,22 +36,13 @@ std::string read_puzzle_input(const std::string& key) {
         possible_paths.push_back(path + filename);
     }
     
-    // Prioritize puzzle_input folder in root
-    std::string puzzle_input_folder = "puzzle_input/";
+    std::string puzzle_input_folder = "puzzle_input/2025/";
     possible_paths.insert(possible_paths.end(), {
         puzzle_input_folder + filename,
         "../" + puzzle_input_folder + filename,
         "../../" + puzzle_input_folder + filename,
         "../../../" + puzzle_input_folder + filename,
         "../../../../" + puzzle_input_folder + filename
-    });
-    
-    // Fall back to other common locations
-    possible_paths.insert(possible_paths.end(), {
-        "input/" + filename,
-        "../input/" + filename,
-        "inputs/" + filename,
-        filename
     });
     
     for (const auto& path : possible_paths) {
@@ -64,8 +55,9 @@ std::string read_puzzle_input(const std::string& key) {
     }
     
     std::string error_msg = "Could not find puzzle input file: " + filename;
+    error_msg += "\nSearched in: puzzle_input/2025/";
     if (input_dir != nullptr || input_path != nullptr) {
-        error_msg += "\nSearched in: ";
+        error_msg += "\nAlso checked: ";
         if (input_dir != nullptr) error_msg += std::string(input_dir) + "/";
         if (input_path != nullptr) error_msg += std::string(input_path) + "/";
     }

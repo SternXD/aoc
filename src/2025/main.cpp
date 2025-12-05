@@ -1,15 +1,19 @@
 // SPDX-FileCopyrightText: 2025 SternXD
 // SPDX-License-Identifier: MIT
 
-#include "common.h"
-#include "day_1/day_1.h"
-#include "day_2/day_2.h"
-#include "day_3/day_3.h"
-#include "day_4/day_4.h"
 #include <iostream>
 #include <string>
 #include <map>
 #include <functional>
+
+#include "common.h"
+
+// Day headers
+#include "day_1/day_1.h"
+#include "day_2/day_2.h"
+#include "day_3/day_3.h"
+#include "day_4/day_4.h"
+#include "day_5/day_5.h"
 
 void print_usage(const char* program_name) {
     std::cerr << "Usage: " << program_name << " <day_number>" << std::endl;
@@ -60,6 +64,7 @@ int main(int argc, char* argv[]) {
         {2, run_day_2},
         {3, run_day_3},
         {4, run_day_4},
+        {5, run_day_5},
     };
     
     if (day_num < 1 || day_num > 25) {
